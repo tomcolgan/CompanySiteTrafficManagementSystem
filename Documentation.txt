@@ -1,0 +1,57 @@
+Some common implementations
+---------------------------
+1. Connection with database is must in every page
+2. There is a GO TO HOME button ad ADD/DELETE/UPDATE ANOTHER in each corresponding pages
+3. Sufficient validations implemented for e.g. without selecting one of radio button you cannot click on Submit to generate QR code
+   or you cannot add a new record without submitting enough values.
+4. Deleting a record does not actually deletes the record, it just updates the STATUS of that record to 'I' i.e. INACTIVE,
+   hence we applied filter of STATUS = 'A' in each query.
+5. STATUS column is default 'A', DATE column is default as Current Time Stamp.
+6. A procedure is executed every time you go to index.php which creates the records for the very same day i.e. puts record from parent table to child table.
+   And also the procedure is scheduled in the database to be executed in each hour to do so in case index.php file is not called.
+   
+Index Page
+----------
+When you open the project, it takes you to the index page of the project i.e. main screen for this project.
+The data are fetched from vehicle_info_actual table on the basis of conditions:
+	STATUS = 'A'
+	DATE = CURRENT DATE
+and is by default ORDER BY DATA_ID i.e. 1st come 1st serve
+
+When you select any of the radio button and submit GENERATE QR, it takes you to the generate_qr.php file 
+where rlevant QR Code processes are carried out.
+
+
+GENERATE QR
+---------------
+The selected data_id is passed and fetch other informations existing against that DATA_ID.
+Then the informations are concatenated as a string value and using in built PHP QR Code library,
+the QR code is generated and displayed on the screen.
+(More details of the process in the file generate_qr.php).
+
+
+ADD
+-------
+This module helps to insert a new record into your project.
+Suppose after few days, you are in need to assign a new vehicle to a new driver for a new purpose,
+then you will need to add their informations. Adding a new record adds in both the tables i.e in parent
+table vehicle_info as well as in vehicle_info_actual table.
+
+DELETE
+----------
+Opposite to add.php, this file let you delete a record which you need no more.
+It updates the status of the selected record to 'I' and it is hidden from the front-end side user,
+but still available in the database.
+
+UPDATE
+------
+This module let you update the informations for a particular record.
+You can assign one vehicle to some other driver or change the purpose of the visit or just make everything blank
+so that in future it can be used when needed.
+
+HISTORY
+-------
+This module let you see the past records i.e. apart from the current date to the date of creation,
+all the records will be available for you to generate qr of them. Suppose after a few days you have updated
+something or deleted some record, but still you will have the records of those days for which the data was in existence.
+
