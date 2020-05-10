@@ -1,4 +1,3 @@
-#importing all the imports which are needed
 import time
 import threading
 import configparser
@@ -16,7 +15,7 @@ import imutils
 import cv2
 
 def loadConfig(type):
-                # Load the configuration files
+                # Load the configuration file
 				config = configparser.ConfigParser()
 				config.sections()
 				config.read('config.ini')
@@ -26,7 +25,7 @@ def loadConfig(type):
 					return config['qrplus']['data']
 				else :
 					return config['qrplus']['state']
-#pushing data using aiohttp				
+				
 async def pushData(d,murl):
 				async with aiohttp.ClientSession() as session:
 					url = 'http://'+loadConfig(1)+murl
@@ -34,7 +33,7 @@ async def pushData(d,murl):
 						data = await response.text()
 						print (data)
 
-#when application is run it will show messages, system start and also the server IP (xampp server IP)
+ 
 def main():
 				print("[INFO] Starting System...")
 				print("[INFO] Connection to server at %s..." % loadConfig(1))
@@ -55,14 +54,11 @@ def main():
 						for barcode in barcodes:
 								# extract the bounding box location of the barcode and draw
 								# the bounding box surrounding the barcode on the image
-								# modified from https://www.programcreek.com/python/example/89445/cv2.rectangle
 								(x, y, w, h) = barcode.rect
 								cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
 								# the barcode data is a bytes object so if we want to draw it
 								# on our output image we need to convert it to a string first
-								# then message is displayed about a QR code being detected
-								# the information from QR code is then sent to the xampp server
 								barcodeData = barcode.data.decode("utf-8")
 								barcodeType = barcode.type
 								myobj = {'data': barcodeData}
@@ -73,8 +69,7 @@ def main():
 
 					
 					
-#once appliocation is still running, it will keep looking for a QR code 
-#error control implemented if camera is not found					
+					
 def iAmAlive(): 
 		print ("[INFO] Run Self Check...")
 		# do your stuff
